@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import jwtDecode from "jwt-decode";
 
 export const fetchUser = createAsyncThunk(
   "user/fetchUser",
   async ({ email, password }) => {
-    console.log(`fetching user data with email: ${email} and password: ${password}`);
-    const res = await axios("post", `${process.env.REACT_APP_BASE_ENDPOINT}/auth`, {
-      email,
-      password,
+    const res = await axios.post(`${process.env.REACT_APP_BASE_ENDPOINT}/auth`, {
+      email: email,
+      password: password,
     });
     return res.data;
   }
@@ -16,13 +16,10 @@ export const fetchUser = createAsyncThunk(
 export const userSlice = createSlice({
   name: "user",
   initialState: {
-    name: "example",
-    surname: "example",
-    email: "example",
-    permissionLevel: 0,
-    accessToken: "",
-    refreshToken: "",
-    isLoggedIn: false,
+    userInfo: localStorage.getItem("jwtToken")
+      ? jwtDecode(localStorage.getItem("jwtToken"))
+      : null,
+    isLoggedIn: localStorage.getItem("jwtToken") ? true : false,
     status: "idle",
     error: null,
   },
@@ -38,12 +35,15 @@ export const userSlice = createSlice({
     },
     [fetchUser.fulfilled]: (state, action) => {
       state.status = "succeeded";
-      state.accessToken = action.payload.accessToken;
-      state.refreshToken = action.payload.refreshToken;
+      localStorage.setItem("jwtToken", action.payload.accessToken);
+      state.userInfo = localStorage.getItem("jwtToken")
+        ? jwtDecode(localStorage.getItem("jwtToken"))
+        : null;
       state.isLoggedIn = true;
     },
     [fetchUser.rejected]: (state, action) => {
       state.status = "failed";
+      console.log("failed to fetch user data");
       state.error = action.error.message;
     },
   },

@@ -1,7 +1,7 @@
 import ulogo from "../assets/img/ulogo.png";
 import { LoginForm } from "../components/LoginForm";
 
-export const LoginPage = () => {
+const LoginPage = () => {
   return (
     <>
       <div className="flex h-screen">

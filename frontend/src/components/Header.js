@@ -2,10 +2,13 @@ import { Navbar, Nav } from "rsuite";
 import HomeIcon from "@rsuite/icons/legacy/Home";
 import "rsuite/dist/rsuite.min.css";
 import ulogo from "../assets/img/ulogo.png";
+import CharacterAuthorizeIcon from "@rsuite/icons/CharacterAuthorize";
 import MemberIcon from "@rsuite/icons/Member";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export const Header = () => {
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   return (
     <>
       <Navbar className="shadow-lg">
@@ -28,9 +31,15 @@ export const Header = () => {
             </Nav.Menu>
           </Nav>
           <Nav pullRight>
-            <Nav.Item icon={<MemberIcon />}>
-              <Link to="/login">GİRİŞ</Link>
-            </Nav.Item>
+            {!isLoggedIn ? (
+              <Nav.Item icon={<CharacterAuthorizeIcon />}>
+                <Link to="/login">GİRİŞ</Link>
+              </Nav.Item>
+            ) : (
+              <Nav.Item icon={<MemberIcon />}>
+                <Link to="/profile">PROFİL</Link>
+              </Nav.Item>
+            )}
           </Nav>
         </div>
       </Navbar>
