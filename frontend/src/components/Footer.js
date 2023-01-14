@@ -11,7 +11,7 @@ export const Footerr = () => {
           color: "white",
         }}
       >
-        © GeeksforGeeks.org
+        © uskudar.edu.tr
       </Footer>
     </>
   );
