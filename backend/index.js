@@ -1,4 +1,5 @@
 const config = require("./common/config/env.config.js");
+const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const express = require("express");
 const app = express();
@@ -22,6 +23,15 @@ app.use(function (req, res, next) {
   }
 });
 
+app.use(
+  '/api',
+  createProxyMiddleware({
+    target: 'http://localhost:3600',
+    changeOrigin: true,
+  })
+);
+
+
 app.use(express.json());
 AuthorizationRouter.routesConfig(app);
 UsersRouter.routesConfig(app);
@@ -29,3 +39,6 @@ UsersRouter.routesConfig(app);
 app.listen(config.port, function () {
   console.log("app listening at port %s", config.port);
 });
+
+
+

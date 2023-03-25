@@ -5,6 +5,7 @@ import jwtDecode from "jwt-decode";
 export const fetchUser = createAsyncThunk(
   "user/fetchUser",
   async ({ email, password }) => {
+    // eslint-disable-next-line no-undef
     const res = await axios.post(`${process.env.REACT_APP_BASE_ENDPOINT}/auth`, {
       email: email,
       password: password,
@@ -40,6 +41,7 @@ export const userSlice = createSlice({
         ? jwtDecode(localStorage.getItem("jwtToken"))
         : null;
       state.isLoggedIn = true;
+      console.log("fetched user data");
     },
     [fetchUser.rejected]: (state, action) => {
       state.status = "failed";
