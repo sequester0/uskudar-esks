@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
@@ -5,7 +6,6 @@ import jwtDecode from "jwt-decode";
 export const fetchUser = createAsyncThunk(
   "user/fetchUser",
   async ({ email, password }) => {
-    // eslint-disable-next-line no-undef
     const res = await axios.post(`${process.env.REACT_APP_BASE_ENDPOINT}/auth`, {
       email: email,
       password: password,
