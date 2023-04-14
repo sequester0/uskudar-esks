@@ -6,10 +6,16 @@ const userSchema = new Schema({
     lastName: String,
     email: String,
     password: String,
-    permissionLevel: Number
+    permissionLevel: Number,
+    organizations: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Organization'
+    }],
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now }
  });
 
- userSchema.virtual('id').get(function () {
+userSchema.virtual('id').get(function () {
     return this._id.toHexString();
 });
 
@@ -22,6 +28,11 @@ userSchema.findById = function (cb) {
     return this.model('Users').find({id: this.id}, cb);
 };
 
+userSchema.pre('save', function (next) {
+    this.updatedAt = Date.now();
+    next();
+});
+
 const User = mongoose.model('Users', userSchema);
 
 exports.findByEmail = (email) => {
@@ -30,6 +41,7 @@ exports.findByEmail = (email) => {
 
 exports.findById = (id) => {
     return User.findById(id)
+        .populate('organizations')
         .then((result) => {
             result = result.toJSON();
             delete result._id;
@@ -48,6 +60,7 @@ exports.list = (perPage, page) => {
         User.find()
             .limit(perPage)
             .skip(perPage * page)
+            .populate('organizations')
             .exec(function (err, users) {
                 if (err) {
                     reject(err);
@@ -73,5 +86,15 @@ exports.removeById = (userId) => {
                 resolve(err);
             }
         });
+    });
+};
+
+exports.addOrganizationToUser = (userId, organizationId) => {
+    return User.findOneAndUpdate({
+        _id: userId
+    }, {
+        $push: {
+            organizations: organizationId
+        }
     });
 };

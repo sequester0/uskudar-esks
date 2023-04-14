@@ -3,10 +3,12 @@ const FileModel = require('../models/file.model')
 exports.uploadFile = (req, res) => {
   const pdfData = Buffer.from(req.body.pdf, 'base64');
   const userId = req.jwt.userId;
+  const organizationId = req.jwt.organization;
 
   const data = {
     userId: userId,
-    pdfData: pdfData
+    pdfData: pdfData,
+    organization: organizationId
   }
   
   FileModel.createFile(data).then((result) => {

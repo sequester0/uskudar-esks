@@ -53,3 +53,10 @@ exports.removeById = (req, res) => {
             res.status(204).send({});
         });
 };
+
+exports.addOrganizationToUser = (req, res) => {
+    UserModel.addOrganizationToUser(req.params.userId, req.params.organizationId)
+        .then((result) => {
+            res.status(204).send({});
+        });
+}

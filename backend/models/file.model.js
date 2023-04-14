@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const pdfSchema = new Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     pdfData: { type: Buffer, required: true},
+    organization: { type: mongoose.Schema.Types.ObjectId, ref: 'Organization', required: true },
     createdAt: { type: Date, default: Date.now }
 });
 

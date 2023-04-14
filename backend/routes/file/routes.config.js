@@ -14,7 +14,7 @@ exports.routesConfig = function (app) {
         FileController.uploadFile
     ]);
 
-    app.get("/files/:fileId", [
+    app.get("/files/:Id", [
         ValidationMiddleware.validJWTNeeded,
         PermissionMiddleware.minimumPermissionLevelRequired(FREE),
         PermissionMiddleware.onlySameUserOrAdminCanDoThisAction,
