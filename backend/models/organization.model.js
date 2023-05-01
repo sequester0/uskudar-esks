@@ -97,7 +97,6 @@ exports.removeById = (organizationId) => {
 
 exports.getOrganizationByCategoryId = (categoryId) => {
     return new Promise((resolve, reject) => {
-        console.log(categoryId);
         Organization.find({category: categoryId})
             .populate({
                 path: 'category',
