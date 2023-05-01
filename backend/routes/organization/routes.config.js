@@ -33,4 +33,9 @@ exports.routesConfig = function (app) {
         PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
         OrganizationController.removeById,
     ]);
+    app.get("/organizations/category/:categoryId", [
+        ValidationMiddleware.validJWTNeeded,
+        PermissionMiddleware.minimumPermissionLevelRequired(FREE),
+        OrganizationController.getOrganizationByCategoryId,
+    ]);
 }

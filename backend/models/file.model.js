@@ -8,9 +8,18 @@ const pdfSchema = new Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
+// Define the `id` virtual field
+pdfSchema.virtual('id').get(function () {
+    return this._id.toHexString();
+});
+
 // Ensure virtual fields are serialized.
 pdfSchema.set('toJSON', {
-    virtuals: true
+    virtuals: true,
+    transform: function(doc, ret) {
+        delete ret._id;
+        delete ret.__v;
+    }
 });
 
 pdfSchema.findById = function (cb) {
@@ -26,6 +35,9 @@ exports.createFile = function ({userId, pdfData}) {
 
 exports.findById = (id) => {
     return Pdf.findById(id).then((result) => {
+                if (!result) {
+                    throw new Error(`Pdf not found with ID ${id}`);
+                }
                 return result.pdfData;
             });
 };

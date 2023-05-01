@@ -17,23 +17,33 @@ organizationSchema.virtual('id').get(function () {
 
 // Ensure virtual fields are serialized.
 organizationSchema.set('toJSON', {
-    virtuals: true
+    virtuals: true,
+    transform: function(doc, ret) {
+        delete ret._id;
+        delete ret.__v;
+    }
 });
 
 organizationSchema.findById = function (cb) {
     return this.model('Organization').find({id: this.id}, cb);
 };
 
+organizationSchema.pre('save', function (next) {
+    this.updatedAt = Date.now();
+    next();
+});
+
 const Organization = mongoose.model('Organization', organizationSchema);
 
 exports.findById = (id) => {
     return Organization.findById(id)
         .populate('category')
-        .populate('owner')
+        .populate({
+            path: 'owner',
+            select: '-password'
+        })
         .then((result) => {
             result = result.toJSON();
-            delete result._id;
-            delete result.__v;
             return result;
         });
 };
@@ -48,17 +58,20 @@ exports.list = (perPage, page) => {
         Organization.find()
             .limit(perPage)
             .skip(perPage * page)
-            .populate('category')
+            .select('-__v')
+            .populate({
+                path: 'category',
+                select: '-__v'
+            })
             .populate({
                 path: 'owner',
-                select: '-password -__v' // Exclude the password field from the owner of the organization
+                select: '-password -__v'
             })
-            .lean()
-            .exec(function (err, users) {
+            .exec(function (err, organizations) {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve(users);
+                    resolve(organizations);
                 }
             })
     });
@@ -79,5 +92,27 @@ exports.removeById = (organizationId) => {
                 resolve(err);
             }
         });
+    });
+};
+
+exports.getOrganizationByCategoryId = (categoryId) => {
+    return new Promise((resolve, reject) => {
+        console.log(categoryId);
+        Organization.find({category: categoryId})
+            .populate({
+                path: 'category',
+                select: '-__v'
+            })
+            .populate({
+                path: 'owner',
+                select: '-password -__v'
+            })
+            .exec(function (err, organizations) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(organizations);
+                }
+            })
     });
 };

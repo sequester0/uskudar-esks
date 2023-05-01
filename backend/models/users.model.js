@@ -21,7 +21,12 @@ userSchema.virtual('id').get(function () {
 
 // Ensure virtual fields are serialized.
 userSchema.set('toJSON', {
-    virtuals: true
+    virtuals: true,
+    transform: function(doc, ret) {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.__v;
+    }
 });
 
 userSchema.findById = function (cb) {
@@ -44,7 +49,6 @@ exports.findById = (id) => {
         .populate('organizations')
         .then((result) => {
             result = result.toJSON();
-            delete result._id;
             delete result.__v;
             return result;
         });

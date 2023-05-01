@@ -15,12 +15,21 @@ categorySchema.virtual('id').get(function () {
 
 // Ensure virtual fields are serialized.
 categorySchema.set('toJSON', {
-    virtuals: true
+    virtuals: true,
+    transform: function(doc, ret) {
+        delete ret._id;
+        delete ret.__v;
+    }
 });
 
 categorySchema.findById = function (cb) {
     return this.model('Category').find({id: this.id}, cb);
 };
+
+categorySchema.pre('save', function (next) {
+    this.updatedAt = Date.now();
+    next();
+});
 
 const Category = mongoose.model('Category', categorySchema);
 
@@ -32,8 +41,6 @@ exports.findById = (id) => {
         }
         // Convert the result to a JSON object and remove the `__v` field
         result = result.toJSON();
-        delete result._id;
-        delete result.__v;
         return result;
       });
 };
@@ -49,7 +56,6 @@ exports.list = (perPage, page) => {
             .select('-__v')
             .limit(perPage)
             .skip(perPage * page)
-            .lean()
             .exec(function (err, users) {
                 if (err) {
                     reject(err);
