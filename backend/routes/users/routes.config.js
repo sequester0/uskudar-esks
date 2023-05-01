@@ -30,6 +30,13 @@ exports.routesConfig = function (app) {
     UsersController.patchById,
   ]);
 
+  app.patch("/users/:userId/organizations/:organizationId", [
+    ValidationMiddleware.validJWTNeeded,
+    PermissionMiddleware.minimumPermissionLevelRequired(FREE),
+    PermissionMiddleware.onlySameUserOrAdminCanDoThisAction,
+    UsersController.addOrganizationToUser,
+  ]);
+
   app.delete("/users/:userId", [
     ValidationMiddleware.validJWTNeeded,
     PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
