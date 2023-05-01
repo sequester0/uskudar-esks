@@ -5,18 +5,27 @@ class BaseResponse {
       this.message = message;
       this.data = data;
     }
-}
 
-class BaseError extends Error {
-    constructor(message, statusCode, description) {
-      super();
-      this.name = this.constructor.name;
-      this.message = message || "Something went wrong. Please try again.";
-      this.statusCode = statusCode || 500;
-      this.description = description || "";
-      Error.captureStackTrace(this, this.constructor);
+    static success(data) {
+        return new BaseResponse(true, 200, "Request successful", data);
+    }
+
+    static created(data) {
+        return new BaseResponse(true, 201, "Request successful", data);
+    }
+
+    static nocontent(data) {
+        return new BaseResponse(true, 204, "Request successful", data);
+    }
+
+    static deleted(data) {
+        return new BaseResponse(true, 204, "Request successful", data);
+    }
+
+    static error(statusCode, message, data) {
+        Error.captureStackTrace(this, this.constructor);
+        return new BaseResponse(false, statusCode, message, data);
     }
 }
 
-module.exports = BaseError;
 module.exports = BaseResponse;

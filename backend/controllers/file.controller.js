@@ -1,4 +1,5 @@
 const FileModel = require('../models/file.model')
+const BaseResponse = require('../models/baseresponse.model');
 
 exports.uploadFile = (req, res) => {
   const pdfData = Buffer.from(req.body.pdf, 'base64');
@@ -12,7 +13,8 @@ exports.uploadFile = (req, res) => {
   }
   
   FileModel.createFile(data).then((result) => {
-      res.status(201).send({ id: result._id });
+    var response = BaseResponse.created({ id: result._id });
+      res.status(201).send(response);
   });
 };
 
@@ -20,12 +22,14 @@ exports.getById = (req, res) => {
   FileModel.findById(req.params.fileId)
       .then((file) => {
         if (!file) {
-          return res.status(404).send('File not found');
+          var response = BaseResponse.error(404, `Not Found: ${err}`, null);
+          return res.status(404).send(response);
         }
         res.setHeader('Content-Type', 'application/pdf');
         res.status(200).send(file);
       }).catch((err) => {
         console.error(err);
-        res.status(500).send('Internal Server Error');
+        var response = BaseResponse.error(500, `Internal Server Error: ${err}`, null);
+        res.status(500).send(response);
       });
 };
