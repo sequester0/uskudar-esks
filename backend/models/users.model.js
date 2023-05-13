@@ -1,4 +1,5 @@
 const mongoose = require('../common/services/mongoose.service').mongoose;
+const OrganizationRole = require('./organizationrole.model');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
@@ -7,13 +8,10 @@ const userSchema = new Schema({
     email: String,
     password: String,
     permissionLevel: Number,
-    organizations: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Organization'
-    }],
+    organizations: { type: [OrganizationRole], default: [] },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
- });
+});
 
 userSchema.virtual('id').get(function () {
     return this._id.toHexString();
@@ -102,3 +100,34 @@ exports.addOrganizationToUser = (userId, organizationId) => {
         }
     });
 };
+
+// exports.addOrganizationRole = function (organizationId, organizationName, role) {
+//     const organizationRole = {
+//       organization: {
+//         _id: organizationId,
+//         name: organizationName,
+//       },
+//       role: role,
+//     };
+    
+//     this.organizations.push(organizationRole);
+//     return this.save();
+// };
+
+userSchema.methods.addOrganizationRole = function (organizationId, organizationName, role) {
+    const organizationRole = {
+      organization: {
+        _id: organizationId,
+        name: organizationName,
+      },
+      role: role,
+    };
+    
+    this.organizations.push(organizationRole);
+    return this.save();
+};
+
+exports.getOrganizationRole = function (organizationId) {
+  return this.organizations.find((orgRole) => orgRole.organization._id.toString() === organizationId.toString());
+};
+  

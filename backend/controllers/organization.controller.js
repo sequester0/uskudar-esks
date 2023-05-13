@@ -1,4 +1,5 @@
 const OrganizationModel = require('../models/organization.model');
+const UserModel = require('../models/users.model');
 const BaseResponse = require('../models/baseresponse.model');
 
 exports.list = (req, res) => {
@@ -20,6 +21,7 @@ exports.list = (req, res) => {
 exports.insert = (req, res) => {
     OrganizationModel.createOrganization(req.body)
         .then((result) => {
+            UserModel.addOrganizationRole(result.owner, result._id, result.name, 'owner');
             var response = BaseResponse.created({id: result._id});
             res.status(201).send(response);
         });

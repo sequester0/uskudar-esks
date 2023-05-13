@@ -14,7 +14,7 @@ exports.login = (req, res) => {
         let b = Buffer.from(hash);
         let refresh_token = b.toString('base64');
         const response = BaseResponse.success({accessToken: token, refreshToken: refresh_token});
-        res.status(201).send(response);
+        res.status(200).send(response);
     } catch (err) {
         const response = BaseResponse.error(500, err.message, err);
         res.status(500).send(response);
@@ -26,7 +26,7 @@ exports.refresh_token = (req, res) => {
         req.body = req.jwt;
         let token = jwt.sign(req.body, jwtSecret);
         const response = BaseResponse.success({id: token});
-        res.status(201).send(response);
+        res.status(200).send(response);
     } catch (err) {
         const response = BaseResponse.error(500, err.message, err);
         res.status(500).send(response);
