@@ -83,3 +83,43 @@ exports.addOrganizationToUser = (req, res) => {
             res.status(404).send(response);
         });
 }
+
+// exports.addOrganizationRole = (userId, organizationId, organizationName, role) => {
+//     return User.findById(userId).then((user) => {
+//       if (user) {
+//         return user.addOrganizationRole(organizationId, organizationName, role);
+//       } else {
+//         throw new Error('User not found');
+//       }
+//     });
+// };
+
+exports.addOrganizationRole = (req, res) => {
+    // Extract the necessary information from the request body
+    const { userId, organizationId, organizationName, role } = req.body;
+  
+    // Find the user by their ID
+    User.findById(userId)
+      .then(user => {
+        // Call the addOrganizationRole method on the user instance
+        return user.addOrganizationRole(organizationId, organizationName, role);
+      })
+      .then(() => {
+        // If the operation was successful, send a success response
+        res.status(200).send({ success: true, message: 'Organization role added successfully.' });
+      })
+      .catch(error => {
+        // If there was an error, send an error response
+        res.status(500).send({ success: false, message: error.message });
+      });
+};
+
+exports.getOrganizationRole = (userId, organizationId) => {
+    return User.findById(userId).then((user) => {
+      if (user) {
+        return user.getOrganizationRole(organizationId);
+      } else {
+        throw new Error('User not found');
+      }
+    });
+};

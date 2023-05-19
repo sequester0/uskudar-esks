@@ -8,7 +8,8 @@ const organizationSchema = new Schema({
     owner: { type: mongoose.Schema.Types.ObjectId, ref: 'Users', required: true },
     category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
     createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now }
+    updatedAt: { type: Date, default: Date.now },
+    approvalStatus: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' }
 });
 
 organizationSchema.virtual('id').get(function () {
@@ -113,5 +114,26 @@ exports.getOrganizationByCategoryId = (categoryId) => {
                     resolve(organizations);
                 }
             })
+    });
+};
+
+exports.findByIdAndUpdate = (id, organizationData) => {
+    return new Promise((resolve, reject) => {
+        Organization.findByIdAndUpdate(id, organizationData, {new: true})
+            .populate({
+                path: 'category',
+                select: '-__v'
+            })
+            .populate({
+                path: 'owner',
+                select: '-password -__v'
+            })
+            .exec(function (err, organization) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(organization);
+                }
+            });
     });
 };

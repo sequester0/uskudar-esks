@@ -1,4 +1,5 @@
 const mongoose = require('../common/services/mongoose.service').mongoose;
+const OrganizationRole = require('./organizationrole.model');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
@@ -7,13 +8,10 @@ const userSchema = new Schema({
     email: String,
     password: String,
     permissionLevel: Number,
-    organizations: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Organization'
-    }],
+    organizations: { type: [OrganizationRole], default: [] },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
- });
+});
 
 userSchema.virtual('id').get(function () {
     return this._id.toHexString();
@@ -37,6 +35,32 @@ userSchema.pre('save', function (next) {
     this.updatedAt = Date.now();
     next();
 });
+
+userSchema.methods.addOrganizationRole = function (organizationId, organizationName, role, approvalStatus) {
+    const organizationRole = {
+        organization: {
+            _id: organizationId,
+            name: organizationName,
+        },
+        role: role,
+        approvalStatus: approvalStatus
+    };
+    this.organizations.push(organizationRole);
+    return this.save();
+};
+
+userSchema.methods.updateOrganizationApprovalStatus = function (organizationId, status) {
+    const orgRoleIndex = this.organizations.findIndex(
+        orgRole => orgRole.organization._id.toString() === organizationId.toString()
+    );
+    
+    if (orgRoleIndex > -1) {
+        this.organizations[orgRoleIndex].approvalStatus = status;
+        return this.save();
+    } else {
+        return Promise.reject(new Error('Organization not found'));
+    }
+};
 
 const User = mongoose.model('Users', userSchema);
 
@@ -102,3 +126,18 @@ exports.addOrganizationToUser = (userId, organizationId) => {
         }
     });
 };
+
+exports.User = User;
+
+// exports.addOrganizationRole = function (organizationId, organizationName, role) {
+//     const organizationRole = {
+//       organization: {
+//         _id: organizationId,
+//         name: organizationName,
+//       },
+//       role: role,
+//     };
+    
+//     this.organizations.push(organizationRole);
+//     return this.save();
+// };

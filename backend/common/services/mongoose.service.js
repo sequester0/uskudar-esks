@@ -7,6 +7,8 @@ const options = {
     useUnifiedTopology: true
 };
 
+mongoose.set('strictQuery', true);
+
 const connectWithRetry = () => {
   console.log('MongoDB connection with retry');
 
