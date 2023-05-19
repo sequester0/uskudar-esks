@@ -13,6 +13,11 @@ exports.routesConfig = function (app) {
         PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
         OrganizationController.insert,
     ]);
+    app.post("/organizations/:organizationId", [
+        ValidationMiddleware.validJWTNeeded,
+        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
+        OrganizationController.updateApprovalStatus,
+    ]);
     app.get("/organizations", [
         ValidationMiddleware.validJWTNeeded,
         PermissionMiddleware.minimumPermissionLevelRequired(FREE),

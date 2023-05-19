@@ -1,5 +1,5 @@
 const OrganizationModel = require('../models/organization.model');
-const UserModel = require('../models/users.model');
+const UserModel = require('../models/users.model').User;
 const BaseResponse = require('../models/baseresponse.model');
 
 exports.list = (req, res) => {
@@ -21,9 +21,22 @@ exports.list = (req, res) => {
 exports.insert = (req, res) => {
     OrganizationModel.createOrganization(req.body)
         .then((result) => {
-            UserModel.addOrganizationRole(result.owner, result._id, result.name, 'owner');
-            var response = BaseResponse.created({id: result._id});
-            res.status(201).send(response);
+            UserModel.findById(result.owner)
+              .then((user) => {
+                user.addOrganizationRole(result._id, result.name, 'owner', result.approvalStatus)
+                    .then(() => {
+                      var response = BaseResponse.created({id: result._id});
+                      res.status(201).send(response);
+                    })
+                    .catch((error) => {
+                      var response = BaseResponse.error(500, `Internal Server Error: ${error.message}`, null);
+                      res.status(500).send(response);
+                    });
+              })
+              .catch((error) => {
+                    var response = BaseResponse.error(500, `Internal Server Error: ${error.message}`, null);
+                    res.status(500).send(response);
+              });
         });
 }
 
@@ -74,3 +87,21 @@ exports.getOrganizationByCategoryId = (req, res) => {
             res.status(404).send(response);
         });
 }
+
+exports.updateApprovalStatus = (req, res) => {
+    const organizationId = req.params.organizationId;
+    const newStatus = req.body.status; // 'approved' or 'rejected'
+    OrganizationModel.findByIdAndUpdate(organizationId, { approvalStatus: newStatus }, { new: true })
+        .then((organization) => {
+            UserModel.findById(organization.owner)
+                .then((user) => {
+                    user.updateOrganizationApprovalStatus(organizationId, organization.approvalStatus);
+                });
+            var response = BaseResponse.success(organization);
+            res.status(200).send(response);
+        })
+        .catch((error) => {
+            var response = BaseResponse.error(500, `Internal Server Error: ${error.message}`, null);
+            res.status(500).send(response);
+        });
+};
