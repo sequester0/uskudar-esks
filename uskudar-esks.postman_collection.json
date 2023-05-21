@@ -1,0 +1,629 @@
+{
+	"info": {
+		"_postman_id": "aae641c7-9218-404e-a2b1-2541556d5a31",
+		"name": "uskudar-esks",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13451923"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Auth",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let res = pm.response.json();\r",
+									"let tok = res.data.accessToken;\r",
+									"pm.environment.set(\"token\", tok);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"i.keremgumus@hotmail.com\",\r\n    \"password\": \"sequ3453\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3600/auth",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3600",
+							"path": [
+								"auth"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Kerem\",\r\n    \"lastName\": \"Gumus\",\r\n    \"email\": \"i.keremgumus@hotmail.com\",\r\n    \"password\": \"sequ3453\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3600/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3600",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3600/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3600",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User By Id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3600/users/63c590f746c1a33280f5e706",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3600",
+							"path": [
+								"users",
+								"63c590f746c1a33280f5e706"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Organization to User",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3600/users/63c590f746c1a33280f5e706/organizations/6439b671c8ca3e8cbe70a9f6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3600",
+							"path": [
+								"users",
+								"63c590f746c1a33280f5e706",
+								"organizations",
+								"6439b671c8ca3e8cbe70a9f6"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Files",
+			"item": [
+				{
+					"name": "Get File By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3600/files/642c8c73d0d161ea18a13c80",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3600",
+							"path": [
+								"files",
+								"642c8c73d0d161ea18a13c80"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Category",
+			"item": [
+				{
+					"name": "Get All Categories",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3600/categories",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3600",
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Category by Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3600/categories/64359f760b22044cc7fe71c6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3600",
+							"path": [
+								"categories",
+								"64359f760b22044cc7fe71c6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Category",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Hukuk Fakültesi\",\r\n    \"description\": \"Hukuk Fakültesi Kulüpleri\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3600/categories",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3600",
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Category by Id",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Hukuk Fakültesi 1\",\r\n    \"description\": \"Hukuk Fakültesi Kulüpleri 1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3600/organizations/64359d9f0b22044cc7fe71c3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3600",
+							"path": [
+								"organizations",
+								"64359d9f0b22044cc7fe71c3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Category by Id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3600/categories/64359d9f0b22044cc7fe71c3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3600",
+							"path": [
+								"categories",
+								"64359d9f0b22044cc7fe71c3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Organization",
+			"item": [
+				{
+					"name": "Get All Organizations",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3600/organizations",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3600",
+							"path": [
+								"organizations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Organization by Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3600/organizations/6439b671c8ca3e8cbe70a9f6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3600",
+							"path": [
+								"organizations",
+								"6439b671c8ca3e8cbe70a9f6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Organization by Category Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3600/organizations/category/6435a0510b22044cc7fe71ca",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3600",
+							"path": [
+								"organizations",
+								"category",
+								"6435a0510b22044cc7fe71ca"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Organization",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Test Kulübü\",\r\n    \"description\": \"Test Fakültesine bağlı Test Kulübü\",\r\n    \"logo\": \"\",\r\n    \"owner\": \"63c590f746c1a33280f5e706\",\r\n    \"category\": \"645f80876523fa0933807a6d\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3600/organizations",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3600",
+							"path": [
+								"organizations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Organization Approval Status",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\": \"rejected\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3600/organizations/6467c5927edfbf56998382b5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3600",
+							"path": [
+								"organizations",
+								"6467c5927edfbf56998382b5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Organization by Id",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Hukuk Test Kulübü\",\r\n    \"description\": \"Hukuk Fakültesine bağlı Hukuk Test Kulübü\",\r\n    \"logo\": \"\",\r\n    \"owner\": \"63c590f746c1a33280f5e706\",\r\n    \"category\": \"6435a0510b22044cc7fe71ca\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3600/categories/64359d9f0b22044cc7fe71c3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3600",
+							"path": [
+								"categories",
+								"64359d9f0b22044cc7fe71c3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Organization by Id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3600/organizations/64359d9f0b22044cc7fe71c3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3600",
+							"path": [
+								"organizations",
+								"64359d9f0b22044cc7fe71c3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
