@@ -4,7 +4,9 @@ This project aims to digitise the operations carried out in the SKS department o
 
 - **Progression:**
     - Frontend %1
-    - Backend %95## Tech Stack
+    - Backend %95
+
+## Tech Stack
 
 **Client:** React, Redux, TailwindCSS
 
